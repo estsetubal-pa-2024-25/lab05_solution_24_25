@@ -8,8 +8,9 @@ import view.FlightsView;
 public class FlightsProgram extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
+
         FlightsView view = new FlightsView();
-        Scene scene = new Scene(view, 1024, 1080);
+        Scene scene = new Scene(view, 1024, 740);
 
         Stage stage = new Stage(StageStyle.DECORATED);
         stage.setTitle("Flights Visualization");

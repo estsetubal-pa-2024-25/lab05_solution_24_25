@@ -12,34 +12,45 @@ import javafx.stage.StageStyle;
 
 @SuppressWarnings("removal")
 public class FirstProgram extends Application {
+
+    private Graph<Character, Integer> load_graph()
+    {
+        Graph<Character, Integer> graph = new GraphEdgeList<>();
+        Vertex<Character> a = graph.insertVertex('a');
+        Vertex<Character> b = graph.insertVertex('b');
+        Vertex<Character> c = graph.insertVertex('c');
+        Vertex<Character> d = graph.insertVertex('d');
+        Vertex<Character> e = graph.insertVertex('e');
+        Vertex<Character> f = graph.insertVertex('f');
+        Vertex<Character> g = graph.insertVertex('g');
+
+        graph.insertEdge(a, b, 6);
+        graph.insertEdge(b, c, 2);
+        graph.insertEdge(c, d, 30);
+        graph.insertEdge(d, e, 10);
+        graph.insertEdge(d, f, 22);
+        graph.insertEdge(f, e, 15);
+        graph.insertEdge(f, g, 8);
+        graph.insertEdge(g, e, 50);
+        graph.insertEdge(g, a, 11);
+
+        return graph;
+    }
+
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        Graph<Character, Integer> g = new GraphEdgeList<>();
+        Graph<Character, Integer> g = load_graph();
 
         // TODO: create graph structure
-        Vertex<Character> vA = g.insertVertex('a');
-        Vertex<Character> vB = g.insertVertex('b');
-        Vertex<Character> vC = g.insertVertex('c');
-        Vertex<Character> vD = g.insertVertex('d');
-        Vertex<Character> vE = g.insertVertex('e');
-        Vertex<Character> vF = g.insertVertex('f');
-        Vertex<Character> vG = g.insertVertex('g');
 
-        g.insertEdge(vA, vB, 6);
-        g.insertEdge(vB, vC, 2);
-        g.insertEdge(vC, vD, 30);
-        g.insertEdge(vD, vE, 10);
-        g.insertEdge(vD, vF, 22);
-        g.insertEdge(vF, vE, 15);
-        g.insertEdge(vF, vG, 8);
-        g.insertEdge(vE, vG, 50);
-        g.insertEdge(vG, vA, 11);
+        ///////////////////////////////////////////////////////////////////////////////////////
+        // STUDENTS -> NOTHING TO DO BELOW THIS LINE
 
         SmartPlacementStrategy strategy = new SmartCircularSortedPlacementStrategy();
         SmartGraphPanel<Character, Integer> graphView = new SmartGraphPanel<>(g, strategy);
 
-        Scene scene = new Scene(new SmartGraphDemoContainer(graphView), 800, 800);
+        Scene scene = new Scene(new SmartGraphDemoContainer(graphView), 800, 600);
 
         Stage stage = new Stage(StageStyle.DECORATED);
         stage.setTitle("JavaFX SmartGraph Visualization");
@@ -48,10 +59,8 @@ public class FirstProgram extends Application {
 
         graphView.init();
 
-        // TODO: call implemented methods
     }
 
-    // TODO: implement methods
 
     public static void main(String[] args) {
         launch(args);

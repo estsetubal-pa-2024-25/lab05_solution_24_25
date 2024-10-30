@@ -39,8 +39,8 @@ public class FlightsView extends BorderPane {
     /** displays the number of inbound/outbound flights of the busiest airport */
     private Label labelBusiestAirportNumberFlights;
 
-
     /** */
+
     private ObservableList<Vertex<Airport>> listAirportsToRemove;
     private ObservableList<Vertex<Airport>> listAirportsFrom;
     private ObservableList<Vertex<Airport>> listAirportsTo;
@@ -53,60 +53,55 @@ public class FlightsView extends BorderPane {
         SmartPlacementStrategy strategy = new SmartCircularSortedPlacementStrategy();
         this.graphView = new SmartGraphPanel<>(graph, strategy);
 
-
         doLayout();
     }
 
     private void createInitialModel() {
-        // Nota docentes: não tenho paciencia para modelar tudo :P
-        Vertex<Airport> a1 = graph.insertVertex(new Airport("LIX"));
-        Vertex<Airport> a2 = graph.insertVertex(new Airport("PIX"));
-        Vertex<Airport> a3 = graph.insertVertex(new Airport("OPO"));
+        // TODO: create flight model - Figure 1 of assignment
 
-        graph.insertEdge(a1, a2, new Flight("asdf", 344));
-        graph.insertEdge(a1, a3, new Flight("fff", 123));
-        graph.insertEdge(a2, a3, new Flight("rty", 657));
-        graph.insertEdge(a1, a2, new Flight("try", 198));
+        Vertex<Airport> sfo = graph.insertVertex(new Airport("SFO"));
+        Vertex<Airport> ord = graph.insertVertex(new Airport("ORD"));
+        Vertex<Airport> pvd = graph.insertVertex(new Airport("PVD"));
+        Vertex<Airport> lga = graph.insertVertex(new Airport("LGA"));
+        Vertex<Airport> hnl = graph.insertVertex(new Airport("HNL"));
+        Vertex<Airport> lax = graph.insertVertex(new Airport("LAX"));
+        Vertex<Airport> dfw = graph.insertVertex(new Airport("DFW"));
+        Vertex<Airport> mia = graph.insertVertex(new Airport("MIA"));
 
-        // TODO: create flight model
-    }
-
-    private void updateStatistics() {
-        // TODO: query model and update labels
-        //  e.g., labelNumberAirports.setText( ?? );
-
-        int nAirports = this.graph.numVertices();
-        int nFlights = this.graph.numEdges();
-
-        Vertex<Airport> busiest = null;
-        int busiestCount = -1;
-        for (Vertex<Airport> v : this.graph.vertices()) {
-            Collection<Edge<Flight, Airport>> flights = this.graph.incidentEdges(v);
-            int count = flights.size();
-
-            if(count > busiestCount) {
-                busiestCount = count;
-                busiest = v;
-            }
-        }
-
-        labelNumberAirports.setText("" + nAirports);
-        labelNumberFlights.setText("" + nFlights);
-        labelBusiestAirport.setText( busiest != null ? busiest.element().toString() : "<None>");
-        labelBusiestAirportNumberFlights.setText(busiest != null ? "" + busiestCount : "<NA>");
+        graph.insertEdge(hnl, lax, new Flight("UN3563", 2555));   // F1
+        graph.insertEdge(hnl, lax, new Flight("DT1597", 2555));   // F2
+        graph.insertEdge(lax, sfo, new Flight("UN9375", 337));   // F3
+        graph.insertEdge(lax, sfo, new Flight("AM4526", 337));   // F4
+        graph.insertEdge(lax, ord, new Flight("UN4836", 1743));  // F5
+        graph.insertEdge(lax, ord, new Flight("VA2001", 1743));  // F6
+        graph.insertEdge(sfo, ord, new Flight("UN1475", 1843));  // F7
+        graph.insertEdge(sfo, ord, new Flight("AL7854", 1843));  // F8
+        graph.insertEdge(lax, dfw, new Flight("SP1020", 1233));  // F9
+        graph.insertEdge(lax, dfw, new Flight("AM4582", 1233));  // F10
+        graph.insertEdge(ord, dfw, new Flight("UN4568", 802));   // F11
+        graph.insertEdge(dfw, lga, new Flight("SP4512", 1387));  // F12
+        graph.insertEdge(ord, pvd, new Flight("AM4520", 849));   // F13
+        graph.insertEdge(ord, pvd, new Flight("UN7812", 849));   // F14
+        graph.insertEdge(pvd, mia, new Flight("FT1000", 1205));  // F15
+        graph.insertEdge(lga, mia, new Flight("FT4021", 1099));  // F16
+        graph.insertEdge(lga, mia, new Flight("AM1026", 1099));  // F17
+        graph.insertEdge(dfw, mia, new Flight("AM5267", 1120));  // F18
     }
 
     private void addAirport(String airportCode) {
         // TODO: implement, check for errors and use showError(message) in case of error
         //  code must be valid, i.e., not empty
-        if(airportCode.isBlank()) {
+
+        if (airportCode.isBlank())
+        {
             showError("Airport code must not be empty.");
             return;
         }
 
         try {
             graph.insertVertex(new Airport(airportCode));
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             showError(e.getMessage());
         }
     }
@@ -118,28 +113,61 @@ public class FlightsView extends BorderPane {
         try {
             double dist = Double.valueOf(distance);
             graph.insertEdge(vertexFrom, vertexTo, new Flight(code, dist));
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             showError(e.getMessage());
         }
     }
 
     private void removeFlight(Edge<Flight, Airport> edge) {
         // TODO: implement, check for errors and use showError(message) in case of error
+
         try {
             graph.removeEdge(edge);
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             showError(e.getMessage());
         }
     }
 
     private void removeAirport(Vertex<Airport> vertex) {
         // TODO: implement, check for errors and use showError(message) in case of error
+
         try {
             graph.removeVertex(vertex);
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             showError(e.getMessage());
         }
     }
+
+    private void updateStatistics() {
+        // TODO: query model and update labels
+        //  e.g., labelNumberAirports.setText( ?? );
+
+        labelNumberAirports.setText( "" + graph.numVertices() );
+        labelNumberFlights.setText( "" + graph.numEdges());
+
+        Vertex<Airport> busiest = null;
+        int busiestCount = -1;
+        for (Vertex<Airport> airport : graph.vertices()) {
+            Collection<Edge<Flight, Airport>> flights = graph.incidentEdges(airport);
+            int count = flights.size();
+            if (count > busiestCount) {
+                busiestCount = count;
+                busiest = airport;
+            }
+        }
+        labelBusiestAirport.setText( busiest!=null? busiest.element().toString() : "<None>" );
+
+        labelBusiestAirportNumberFlights.setText( busiest!=null? "" + busiestCount : "<NA>" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////
+    // STUDENTS -> THERE IS NOTHING TO DO BELOW THIS LINE
 
     public void takeOff() {
         this.graphView.init();
@@ -258,8 +286,6 @@ public class FlightsView extends BorderPane {
             updateStatistics();
         });
     }
-
-
 
     private void updateControls() {
         Collection<Vertex<Airport>> airports = graph.vertices();
